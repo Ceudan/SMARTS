@@ -6,7 +6,12 @@ import gym
 sys.path.insert(0, str(Path(__file__).parents[2].absolute()))
 from examples.tools.argument_parser import default_argument_parser
 from smarts.core.agent import Agent
-from smarts.core.agent_interface import AgentInterface, AgentType, DoneCriteria
+from smarts.core.agent_interface import (
+    AgentInterface,
+    AgentType,
+    DoneCriteria,
+    InterestDoneCriteria,
+)
 from smarts.core.observations import Observation
 from smarts.core.utils.episodes import episodes
 from smarts.sstudio.scenario_construction import build_scenarios
@@ -40,7 +45,12 @@ def main(scenarios, headless, num_episodes, max_episode_steps=None):
             interface=AgentInterface.from_type(
                 AgentType.LanerWithSpeed,
                 max_episode_steps=max_episode_steps,
-                done_criteria=DoneCriteria(collision=False),
+                done_criteria=DoneCriteria(
+                    collision=False,
+                    interest=InterestDoneCriteria(
+                        include_scenario_marked=True, strict=True
+                    ),
+                ),
             ),
             agent_builder=ChaseViaPointsAgent,
         )
