@@ -64,7 +64,7 @@ register(
                 wrong_way=False,
                 not_moving=False,
                 agents_alive=None,
-                actors_alive=None,
+                interest=None,
             ),
             accelerometer=False,
             drivable_area_grid_map=False,
