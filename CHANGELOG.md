@@ -62,6 +62,7 @@ Copy and pasting the git commit messages is __NOT__ enough.
 - Included `RelativeTargetPose` action space to the set of allowed action spaces in `platoon-v0` env.
 - `Collision.collidee_id` now gives the vehicle id rather than the name of the owner of the vehicle (usually the agent id.) `Collision.collidee_owner_id` now provides the id of the controlling `agent` (or other controlling entity in the future.) This is because 1) `collidee_id` should refer to the body and 2) in most cases the owner name would be `None`.
 - `hiway-v1` can now be configured for per-agent or environment reward(s), truncation(s), and termination(s) through `step_return_type`.
+- `hiway-v1`'s `observation_options` no longer has an effect on the environment rewards, truncations, and terminations shapes.
 ### Deprecated
 ### Fixed
 - Fixed issues related to waypoints in junctions on Argoverse maps. Waypoints will now be generated for all paths leading through the lane(s) the vehicle is on.
@@ -99,9 +100,7 @@ Copy and pasting the git commit messages is __NOT__ enough.
 ### Added
 - Added vehicle of interest coloring through scenario studio. This lets the scenario color vehicles that match a certain pattern of vehicle id.
 - SMARTS now provides `remove_provider` to remove a provider from the simulation. Use carefully.
-- `hiway-v1` can now be configured for per-agent or environment reward(s), truncation(s), and termination(s) through `step_return_type`.
 ### Changed
-- `hiway-v1`'s `observation_options` no longer has an effect on the environment rewards, truncations, and terminations shapes.
 ### Deprecated
 ### Fixed
 - Fixed "rl/racing" `numpy` incompatibility.
