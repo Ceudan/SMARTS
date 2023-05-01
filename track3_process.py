@@ -18,12 +18,12 @@ scenario_id = data_path.split("/")[-2]
 
 # Copy data to smarts directory
 subprocess.check_output(
-    f"cp -R {data_path} /root/driving-smarts-2.competition-scenarios/t3/dataset",
+    f"cp -R {data_path} /home/kyber/driving-smarts-2.competition-scenarios/t3/dataset",
     shell=True,
 )
 # Create scenario file
 scenario_path = (
-    f"/root/driving-smarts-2.competition-scenarios/t3/test/{scenario_id}_agents_1"
+    f"/home/kyber/driving-smarts-2.competition-scenarios/t3/test/{scenario_id}_agents_1"
 )
 subprocess.check_output(f"mkdir -p {scenario_path}", shell=True)
 
@@ -43,7 +43,7 @@ from smarts.core.colors import Colors
 
 PATH = "dataset"
 scenario_id = "{scenario_id}"  # e.g. "0000b6ab-e100-4f6b-aee8-b520b57c0530"
-scenario_path = Path(__file__).resolve().parents[2] / PATH / scenario_id # e.g. Path("/home/user/argoverse/train/") / scenario_id
+scenario_path = Path(__file__).resolve().parents[3] / PATH / scenario_id # e.g. Path("/home/user/argoverse/train/") / scenario_id
 
 traffic_histories = [
 t.TrafficHistoryDataset(
@@ -125,7 +125,7 @@ from smarts.core.colors import Colors
 
 PATH = "dataset"
 scenario_id = "{scenario_id}"  # e.g. "0000b6ab-e100-4f6b-aee8-b520b57c0530"
-scenario_path = Path(__file__).resolve().parents[2] / PATH / scenario_id # e.g. Path("/home/user/argoverse/train/") / scenario_id
+scenario_path = Path(__file__).resolve().parents[3] / PATH / scenario_id # e.g. Path("/home/user/argoverse/train/") / scenario_id
 
 traffic_histories = [
 t.TrafficHistoryDataset(
@@ -136,7 +136,7 @@ t.TrafficHistoryDataset(
 ]
 ego_mission = [t.EndlessMission(begin=("{first_state.road_id}", {first_state.lane_index}, {round(first_state.lane_position.s, 1)}))]
 
-leader_id = None
+leader_id = "history-vehicle-"
 
 gen_scenario(
 t.Scenario(
