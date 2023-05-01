@@ -949,14 +949,26 @@ class SMARTS(ProviderManager):
             )
 
     def observe_from(
-        self, vehicle_ids: Sequence[str]
-    ) -> Tuple[
-        Dict[str, Observation], Dict[str, float], Dict[str, float], Dict[str, bool]
-    ]:
+        self, vehicle_ids: Sequence[str], interface: AgentInterface
+    ) -> Tuple[Dict[str, Observation], Dict[str, bool]]:
         """Generate observations from the specified vehicles."""
         self._check_valid()
-        return self._agent_manager.observe_from(
-            vehicle_ids, self._traffic_history_provider.done_this_step
+
+        vehicles = {
+            v_id: self.vehicle_index.vehicle_by_id(v_id) for v_id in vehicle_ids
+        }
+        sensor_states = {
+            vehicle.id: self._sensor_manager.sensor_state_for_actor_id(vehicle.id)
+            for vehicle in vehicles.values()
+        }
+        return self.sensor_manager.observe_batch(
+            self.cached_frame,
+            self.local_constants,
+            interface,
+            sensor_states,
+            vehicles,
+            self.renderer_ref,
+            self.bc,
         )
 
     @property
@@ -1423,7 +1435,7 @@ class SMARTS(ProviderManager):
                 actor_id = self._vehicle_index.owner_id_from_vehicle_id(collidee.id)
                 # TODO: Should we specify the collidee as the vehicle ID instead of
                 #       the agent/social ID?
-                collision = Collision(collidee_id=actor_id)
+                collision = Collision(collidee_id=actor_id or collidee.id)
                 vehicle_collisions.append(collision)
 
         traffic_providers = [

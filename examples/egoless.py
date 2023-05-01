@@ -17,7 +17,7 @@ def main(scenarios, headless, num_episodes, max_episode_steps=None):
     )
 
     if max_episode_steps is None:
-        max_episode_steps = 300
+        max_episode_steps = 150
 
     for episode in episodes(n=num_episodes):
         env.reset()
@@ -44,5 +44,5 @@ if __name__ == "__main__":
     main(
         scenarios=args.scenarios,
         headless=args.headless,
-        num_episodes=args.episodes,
+        num_episodes=5,
     )
