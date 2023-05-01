@@ -18,7 +18,7 @@ scenario_id = data_path.split("/")[-2]
 
 # Copy data to smarts directory
 subprocess.check_output(
-    f"cp -R {data_path} /home/kyber/driving-smarts-2.competition-scenarios/t3/dataset",
+    f"cp -R {data_path} /home/kyber/driving-smarts-2.competition-scenarios/dataset",
     shell=True,
 )
 # Create scenario file
@@ -70,33 +70,28 @@ output_dir=Path(__file__).parent,
 process = subprocess.run(
     ["scl", "run", "--envision", "examples/egoless.py", scenario_path]
 )
-while True:
-    try:
-        vehicle_id = input("Enter the vehicle id of interest: ")
-        recorder = traffic_histories_to_observations.ObservationRecorder(
-            scenario=scenario_path,
-            output_dir=scenario_path,
-            seed=42,
-            start_time=None,
-            end_time=None,
-        )
-        recorder.collect(vehicles_with_sensors=[int(vehicle_id)], headless=True)
 
-        # Load pickle file of observations
-        with open(
-            f"{scenario_path}/Agent-history-vehicle-{vehicle_id}.pkl", "rb"
-        ) as pf:
-            data = pickle.load(pf)
-        break
-    except FileNotFoundError:
-        print("Vehicle id not found. Try again.")
+vehicle_id = input("Enter the vehicle id of interest: ")
+recorder = traffic_histories_to_observations.ObservationRecorder(
+    scenario=scenario_path,
+    output_dir=scenario_path,
+    seed=42,
+    start_time=None,
+    end_time=None,
+)
+recorder.collect(vehicles_with_sensors=[int(vehicle_id)], headless=True)
+
+# Load pickle file of observations
+with open(f"{scenario_path}/history-vehicle-{vehicle_id}.pkl", "rb") as pf:
+    data = pickle.load(pf)
+
 
 # Sort the keys of the dict so we can select the first and last times
 keys = list(data.keys())
 keys.sort()
 
 # Extract vehicle state from first and last times
-first_time = keys[0]
+first_time = keys[1]
 last_time = keys[-1]
 first_state: EgoVehicleObservation = data[first_time].ego_vehicle_state
 last_state: EgoVehicleObservation = data[last_time].ego_vehicle_state
