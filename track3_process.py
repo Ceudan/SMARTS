@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 import pickle
+import os
 from smarts.core.sensors import EgoVehicleObservation
 from smarts.dataset import traffic_histories_to_observations
 from pathlib import Path
@@ -15,7 +16,14 @@ args = parser.parse_args()
 
 data_path = args.scenario_path
 scenario_id = data_path.split("/")[-2]
+t3_test_path = "/home/kyber/driving-smarts-2.competition-scenarios/t3/test/"
 
+# check exist
+for root, dirs, files in os.walk(t3_test_path, topdown=False):
+    for name in dirs:
+        if scenario_id in os.path.join(root, name):
+            print("scenario exists")
+            exit()
 # Copy data to smarts directory
 subprocess.check_output(
     f"cp -R {data_path} /home/kyber/driving-smarts-2.competition-scenarios/dataset",
@@ -147,7 +155,13 @@ output_dir=Path(__file__).parent,
 subprocess.run(["black", f"{scenario_path}/scenario.py"])
 subprocess.run(["code", f"{scenario_path}/scenario.py"])
 
-input("When done checking the scenario, press any key to continue")
+cont = input(
+    "When done checking the scenario, press any key to continue, or 'd' to delete"
+)
+if cont == "d":
+    subprocess.run(["rm", "-r", scenario_path])
+    print("scenario removed")
+    exit()
 while True:
     subprocess.run(
         [
@@ -158,8 +172,21 @@ while True:
             scenario_path,
         ]
     )
-    vis = input("Does it look good? Press any key to continue, otherwise press 'n': ")
+    vis = input(
+        "Does it look good? Press any key to continue, press 'd' to remove, otherwise press 'n': "
+    )
     if vis != "n":
         break
+    if vis == "d":
+        subprocess.run(["rm", "-r", scenario_path])
+        print("scenario removed")
+        exit()
     else:
         print("replay the scenario")
+
+folder_count = 0
+for root, dirs, files in os.walk(t3_test_path, topdown=False):
+    for name in dirs:
+        if name != "map" and name != "build":
+            folder_count += 1
+print(f"there are {folder_count} scenarios already")

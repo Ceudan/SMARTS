@@ -48,7 +48,7 @@ def main(scenarios, headless, num_episodes, max_episode_steps=None):
                 done_criteria=DoneCriteria(
                     collision=False,
                     interest=InterestDoneCriteria(
-                        include_scenario_marked=True, strict=True
+                        include_scenario_marked=True, strict=False
                     ),
                 ),
             ),
@@ -99,5 +99,5 @@ if __name__ == "__main__":
     main(
         scenarios=args.scenarios,
         headless=args.headless,
-        num_episodes=args.episodes,
+        num_episodes=3,
     )
