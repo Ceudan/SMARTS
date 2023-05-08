@@ -163,7 +163,7 @@ def resolve_agent_interface(agent_interface: AgentInterface):
     """
 
     done_criteria = DoneCriteria(
-        collision=False,
+        collision=True,
         off_road=True,
         off_route=False,
         on_shoulder=False,
