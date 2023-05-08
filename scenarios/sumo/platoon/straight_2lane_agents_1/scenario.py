@@ -11,50 +11,49 @@ from smarts.sstudio.types import (
     Via,
 )
 
-begin_road_lane = [("E0", 0), ("E0", 1), ("E0", 2)]
-first_via = (0, 1, 2)
-second_via = (0, 1, 2)
-third_via = (0, 1, 2)
+first_via = (0, 1)
+second_via = (0, 1)
+third_via = (0, 1)
 
-route_comb = list(product(begin_road_lane, first_via, second_via, third_via))
+route_comb = product(first_via, second_via, third_via)
 
 leader_mission = []
 for route in route_comb:
     leader_mission.append(
         EndlessMission(
-            begin=(route[0][0], route[0][1], 20),
+            begin=("E0", 1, 20),
             via=(
                 Via(
-                    "E2",
-                    lane_offset=20,
-                    lane_index=route[1],
+                    "E0",
+                    lane_offset=30,
+                    lane_index=1,
                     required_speed=10,
                 ),
                 Via(
-                    "E2",
-                    lane_offset=150,
-                    lane_index=route[2],
-                    required_speed=18,
+                    "E0",
+                    lane_offset=100,
+                    lane_index=route[0],
+                    required_speed=20,
                 ),
                 Via(
-                    "E2",
-                    lane_offset=270,
-                    lane_index=route[3],
+                    "E0",
+                    lane_offset=170,
+                    lane_index=route[1],
                     required_speed=13,
                 ),
                 Via(
-                    "E4",
-                    lane_offset=10,
-                    lane_index=0,
-                    required_speed=15,
+                    "E0",
+                    lane_offset=240,
+                    lane_index=route[2],
+                    required_speed=13,
                 ),
             ),
-        )
+        ),
     )
 
 leader_actor = [
     SocialAgentActor(
-        name="777777",
+        name="Leader-007",
         agent_locator="zoo.policies:chase-via-points-agent-v0",
         initial_speed=0,
     )
@@ -62,7 +61,7 @@ leader_actor = [
 
 ego_missions = [
     EndlessMission(
-        begin=("E0", 0, 5),
+        begin=("E0", 1, 5),
         entry_tactic=TrapEntryTactic(wait_to_hijack_limit_s=0, default_entry_speed=0),
     )
 ]

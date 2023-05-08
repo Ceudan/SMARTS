@@ -27,9 +27,20 @@ class Preprocess(gym.Wrapper):
         self.action_space = self._format_action.action_space
 
     def _process(self, obs):
+        # if obs["ego_vehicle_state"]["position"][0] > 190:
+        #     plot = True
+        # else:
+        #     plot = False
+
         obs = self._filter_obs.filter(obs)
         obs = self._frame_stack.stack(obs)
         obs = self._make_dict.make(obs)
+
+        # if plot:
+        #     from contrib_policy.helper import plotter3d
+        #     print("-----------------------------")
+        #     plotter3d(obs=obs["rgb"],rgb_gray=3,channel_order="first",pause=0)
+        #     print("-----------------------------")
 
         return obs
 

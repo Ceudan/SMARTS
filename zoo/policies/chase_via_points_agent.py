@@ -4,9 +4,21 @@ from smarts.core.agent import Agent
 from smarts.core.observations import Observation
 from smarts.core.sensors import LANE_ID_CONSTANT
 
+# from contrib_policy.helper import plotter3d
+
 
 class ChaseViaPointsAgent(Agent):
     def act(self, obs: Observation):
+        # self.step += 1
+        # if self.step == 1:
+        #     import time
+        #     time.sleep(90)
+
+        # if obs.ego_vehicle_state.position[0] > 195:
+        #     self._flag = 0
+        #     rgb=filter(obs,res=self._res)
+        #     plotter3d(obs=rgb,rgb_gray=3,channel_order="first",pause=self._flag)
+
         assert obs.waypoint_paths, (
             f"Waypoint paths = {obs.waypoint_paths}; "
             "cannot be empty or None. Enable waypoint paths in agent interface."

@@ -91,4 +91,9 @@ class Reward(gym.Wrapper):
             # Reward for distance travelled by driving
             reward[agent_id] += np.float64(env_reward[agent_id])
 
+            # from contrib_policy.helper import plotter3d
+            # print("-----------------------------")
+            # plotter3d(obs=rgb_masked,rgb_gray=3,channel_order="last",pause=0)
+            # print("-----------------------------")
+
         return reward

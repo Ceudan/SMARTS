@@ -2,12 +2,6 @@ import importlib
 from pathlib import Path
 
 from smarts.core.agent_interface import (
-    AgentInterface,
-    AgentType,
-    DoneCriteria,
-    Waypoints,
-)
-from smarts.core.agent_interface import (
     RGB,
     AgentInterface,
     AgentType,
@@ -73,7 +67,11 @@ register(
             max_episode_steps=None,
             neighborhood_vehicle_states=False,
             occupancy_grid_map=False,
-            top_down_rgb=False,
+            top_down_rgb=RGB(
+                width=256,
+                height=256,
+                resolution=50 / 256,  # m/pixels
+            ),
             road_waypoints=False,
             waypoint_paths=Waypoints(lookahead=80),
             signals=False,

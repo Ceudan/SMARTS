@@ -19,12 +19,13 @@ from smarts.sstudio.types import (
 
 normal = TrafficActor(
     name="car",
-    depart_speed=0,
-    min_gap=Distribution(mean=3, sigma=0),
-    speed=Distribution(mean=0.7, sigma=0),
+    speed=Distribution(sigma=0.5, mean=1.0),
 )
 
-leader = TrafficActor(name="777777", depart_speed=0)
+leader = TrafficActor(
+    name="Leader-007",
+    depart_speed=0,
+)
 
 # Social path = (start_lane, end_lane)
 social_paths = [
@@ -54,8 +55,8 @@ for name, (social_path, leader_path) in enumerate(route_comb):
         flows=[
             Flow(
                 route=Route(
-                    begin=("E0", 0, 0),
-                    end=("E1", r[1], "max"),
+                    begin=("E0", r[0], 0),
+                    end=("E0", r[1], "max"),
                 ),
                 # Random flow rate, between x and y vehicles per minute.
                 rate=60 * random.uniform(4, 6),
@@ -67,16 +68,16 @@ for name, (social_path, leader_path) in enumerate(route_comb):
                 # 300s.
                 end=60 * 15,
                 actors={normal: 1},
-                randomly_spaced=False,
+                randomly_spaced=True,
             )
             for r in social_path
         ],
         trips=[
             Trip(
-                vehicle_name="777777",
+                vehicle_name="Leader-007",
                 route=Route(
-                    begin=("E0", 1, 15),
-                    end=("E1", leader_path[1], "max"),
+                    begin=("E0", 1, 20),
+                    end=("E0", leader_path[1], "max"),
                 ),
                 depart=19,
                 actor=leader,
@@ -84,12 +85,11 @@ for name, (social_path, leader_path) in enumerate(route_comb):
             ),
         ],
     )
-# 1. if the L delays, F delays accordingly
-# 2. when the leader appears, dont move until ego appear
+
 
 ego_missions = [
     EndlessMission(
-        begin=("E0", 1, 5),
+        begin=("E0", 1, 10),
         start_time=20,
         entry_tactic=TrapEntryTactic(wait_to_hijack_limit_s=0, default_entry_speed=0),
     )  # Delayed start, to ensure road has prior traffic.
@@ -99,7 +99,7 @@ gen_scenario(
     scenario=Scenario(
         traffic=traffic,
         ego_missions=ego_missions,
-        scenario_metadata=ScenarioMetadata("777777", Colors.Blue),
+        scenario_metadata=ScenarioMetadata("Leader-007", Colors.Blue),
     ),
     output_dir=Path(__file__).parent,
 )

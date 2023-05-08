@@ -1,5 +1,5 @@
 import math
-from typing import Any, Dict, Sequence
+from typing import Any, Dict, Sequence, Tuple
 
 import gym
 import numpy as np
@@ -11,17 +11,22 @@ from smarts.core.colors import Colors, SceneColors
 class FilterObs:
     """Filter only the selected observation parameters."""
 
-    def __init__(self, top_down_rgb: RGB):
+    def __init__(
+        self, top_down_rgb: RGB, crop: Tuple[int, int, int, int] = (0, 0, 0, 0)
+    ):
         self.observation_space = gym.spaces.Box(
             low=0,
             high=255,
-            shape=(3, top_down_rgb.height, top_down_rgb.width),
+            shape=(
+                3,
+                top_down_rgb.height - crop[2] - crop[3],
+                top_down_rgb.width - crop[0] - crop[1],
+            ),
             dtype=np.uint8,
         )
 
         self._no_color = np.zeros((3,))
         self._wps_color = np.array(Colors.GreenTransparent.value[0:3]) * 255
-        self._leader_color = np.array(SceneColors.SocialAgent.value[0:3]) * 255
         self._traffic_color = np.array(SceneColors.SocialVehicle.value[0:3]) * 255
         self._road_color = np.array(SceneColors.Road.value[0:3]) * 255
         self._lane_divider_color = np.array(SceneColors.LaneDivider.value[0:3]) * 255
@@ -43,6 +48,14 @@ class FilterObs:
         )
         self._rgb_mask = np.zeros(shape=(h, w, 3), dtype=np.uint8)
         self._rgb_mask[shape[0][0] : shape[0][1], shape[1][0] : shape[1][1], :] = 1
+
+        self._crop = crop
+        assert (
+            self._crop[0] < np.floor(w / 2)
+            and self._crop[1] < np.floor(w / 2)
+            and self._crop[2] < np.floor(h / 2)
+            and self._crop[3] < np.floor(h / 2)
+        ), f"Expected crop to be less than half the image size, got crop={self._crop} for an image of size[h,w]=[{h},{w}]."
 
     def filter(self, obs: Dict[str, Any]) -> Dict[str, Any]:
         """Adapts the environment's observation."""
@@ -75,6 +88,9 @@ class FilterObs:
                 img_x, img_y = point[0], point[1]
                 if all(rgb_ego[img_y, img_x, :] == self._no_color):
                     rgb_ego[img_y, img_x, :] = self._wps_color
+
+        # Crop image
+        rgb_ego = rgb_ego[self._crop[2]:h-self._crop[3],self._crop[0]:w-self._crop[1],:]
 
         # Channel first rgb
         rgb_ego = rgb_ego.transpose(2, 0, 1)
