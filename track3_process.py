@@ -19,11 +19,17 @@ scenario_id = data_path.split("/")[-2]
 t3_test_path = "/home/kyber/driving-smarts-2.competition-scenarios/t3/test/"
 
 # check exist
+overwrite = ""
 for root, dirs, files in os.walk(t3_test_path, topdown=False):
     for name in dirs:
         if scenario_id in os.path.join(root, name):
-            print("scenario exists")
-            exit()
+            overwrite = input("scenario exists,press o to overwrite: ")
+            if overwrite == "o":
+                break
+            else:
+                exit()
+    if overwrite == "o":
+        break
 # Copy data to smarts directory
 subprocess.check_output(
     f"cp -R {data_path} /home/kyber/driving-smarts-2.competition-scenarios/dataset",
@@ -102,16 +108,16 @@ keys.sort()
 first_time = keys[1]
 last_time = keys[-1]
 first_state: EgoVehicleObservation = data[first_time].ego_vehicle_state
-last_state: EgoVehicleObservation = data[last_time].ego_vehicle_state
+# last_state: EgoVehicleObservation = data[last_time].ego_vehicle_state
 
 # Print start and end arguments for mission route
 print(
     f'begin=("{first_state.road_id}", {first_state.lane_index}, {round(first_state.lane_position.s, 1)})'
 )
-print(
-    f'end=("{last_state.road_id}", {last_state.lane_index}, {round(last_state.lane_position.s, 1)})'
-)
-
+# print(
+#     f'end=("{last_state.road_id}", {last_state.lane_index}, {round(last_state.lane_position.s, 1)})'
+# )
+leader_id = input("Enter the leader id: ")
 # write in the mission route
 with filepath.open("w", encoding="utf-8") as f:
     f.write(
@@ -139,7 +145,7 @@ t.TrafficHistoryDataset(
 ]
 ego_mission = [t.EndlessMission(begin=("{first_state.road_id}", {first_state.lane_index}, {round(first_state.lane_position.s, 1)}))]
 
-leader_id = "history-vehicle-"
+leader_id = "history-vehicle-{leader_id}$"
 
 gen_scenario(
 t.Scenario(
