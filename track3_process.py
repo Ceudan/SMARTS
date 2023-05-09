@@ -181,12 +181,12 @@ while True:
     vis = input(
         "Does it look good? Press any key to continue, press 'd' to remove, otherwise press 'n': "
     )
-    if vis != "n":
-        break
     if vis == "d":
         subprocess.run(["rm", "-r", scenario_path])
         print("scenario removed")
         exit()
+    if vis != "n":
+        break
     else:
         print("replay the scenario")
 
