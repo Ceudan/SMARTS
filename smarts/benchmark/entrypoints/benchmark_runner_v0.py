@@ -57,7 +57,7 @@ def _eval_worker_local(name, env_config, episodes, agent_locator, error_tolerant
         agent_interface=agent_registry.make(locator=agent_locator).interface,
         **env_config["kwargs"],
     )
-    env = Metrics(env, formula_path=env_config["metric_formula"])
+    # env = Metrics(env, formula_path=env_config["metric_formula"])
     agents = {
         agent_id: agent_registry.make_agent(locator=agent_locator)
         for agent_id in env.agent_ids
@@ -86,7 +86,8 @@ def _eval_worker_local(name, env_config, episodes, agent_locator, error_tolerant
                 current_resets += 1
                 obs, info = env.reset()
     finally:
-        records = env.records()
+        # records = env.records()
+        records = {}
         env.close()
     return name, records
 
@@ -180,9 +181,9 @@ def benchmark(benchmark_args, agent_locator, log_workers=False):
             records_cumulative.update(records)
             print(f"\nScoring {name} ...")
 
-        score = _get_score(records=records_cumulative, metric_formula=metric_formula)
-        print("\nSCORE")
-        pprint.pprint(score)
+        # score = _get_score(records=records_cumulative, metric_formula=metric_formula)
+        # print("\nSCORE")
+        # pprint.pprint(score)
 
     print("\n<-- Evaluation complete -->\n")
 

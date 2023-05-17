@@ -5,8 +5,7 @@ smarts:
   agent_locator: inference:contrib-agent-v0
   env_id: smarts.env:platoon-v0
   scenarios:
-    - scenarios/sumo/platoon/merge_exit_sumo_t_agents_1
-
+    - /home/kyber/SMARTS/scenarios/sumo/vehicle_following/merge_exit_sumo_t_agents_1
   # PPO algorithm
   alg:
     n_steps: 1024

@@ -193,6 +193,6 @@ while True:
 folder_count = 0
 for root, dirs, files in os.walk(t3_test_path, topdown=False):
     for name in dirs:
-        if name != "map" and name != "build":
+        if name.endswith("agents_1") == True:
             folder_count += 1
 print(f"there are {folder_count} scenarios already")

@@ -163,16 +163,16 @@ def resolve_agent_interface(agent_interface: AgentInterface):
     """
 
     done_criteria = DoneCriteria(
-        collision=True,
-        off_road=True,
+        collision=False,
+        off_road=False,
         off_route=False,
         on_shoulder=False,
-        wrong_way=True,
+        wrong_way=False,
         not_moving=False,
         agents_alive=None,
         interest=InterestDoneCriteria(
-            include_scenario_marked=True,
-            strict=True,
+            include_scenario_marked=False,
+            strict=False,
         ),
     )
     max_episode_steps = 1000

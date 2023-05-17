@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 import pickle
+import os
 from smarts.core.sensors import EgoVehicleObservation
 from smarts.dataset import traffic_histories_to_observations
 from pathlib import Path
@@ -15,7 +16,6 @@ args = parser.parse_args()
 
 data_path = args.scenario_path
 scenario_id = data_path.split("/")[-2]
-
 # Copy data to smarts directory
 subprocess.check_output(
     f"cp -R {data_path} /home/kyber/driving-smarts-2.competition-scenarios/dataset/",
@@ -100,13 +100,17 @@ print(
 print(
     f'end=("{last_state.road_id}", {last_state.lane_index}, {round(last_state.lane_position.s, 1)})'
 )
+
 save_to = input("Which folder this scenario should be saved to?")
+
+t3_test_path = f"/home/kyber/driving-smarts-2.competition-scenarios/t2/test/{save_to}"
+
 subprocess.run(
     [
         "rsync",
         "-a",
         scenario_path,
-        f"/home/kyber/driving-smarts-2.competition-scenarios/t2/test/{save_to}",
+        t3_test_path,
     ]
 )
 subprocess.run(
@@ -168,3 +172,11 @@ while True:
         break
     else:
         print("replay the scenario")
+
+t2_test_path = "/home/kyber/driving-smarts-2.competition-scenarios/t2/test/"
+folder_count = 0
+for root, dirs, files in os.walk(t2_test_path, topdown=False):
+    for name in dirs:
+        if name.endswith("agents_1") == True:
+            folder_count += 1
+print(f"there are {folder_count} scenarios already")
