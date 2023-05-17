@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import gym
+import gymnasium as gym
 
 gym.logger.set_level(40)
 import pytest
@@ -165,19 +165,19 @@ def test_sync_async_episodes(env_constructor, single_env_actions, auto_reset):
         # Step 1
         env.reset()
         # Step 2
-        _, _, batched_dones, _ = env.step(batched_actions)
-        assert all(dones["__all__"] == False for dones in batched_dones)
+        _, _, batched_terminated, _ = env.step(batched_actions)
+        assert all(terminated["__all__"] == False for terminated in batched_terminated)
         # Step 3
-        _, _, batched_dones, _ = env.step(batched_actions)
-        assert all(dones["__all__"] == True for dones in batched_dones)
+        _, _, batched_terminated, _ = env.step(batched_actions)
+        assert all(terminated["__all__"] == True for terminated in batched_terminated)
         # Step 4
-        _, _, batched_dones, _ = env.step(batched_actions)
+        _, _, batched_terminated, _ = env.step(batched_actions)
         if auto_reset:
-            assert all(dones["__all__"] == False for dones in batched_dones)
+            assert all(terminated["__all__"] == False for terminated in batched_terminated)
         else:
-            assert all(dones["__all__"] == True for dones in batched_dones)
+            assert all(terminated["__all__"] == True for terminated in batched_terminated)
         # Step 5
-        _, _, batched_dones, _ = env.step(batched_actions)
-        assert all(dones["__all__"] == True for dones in batched_dones)
+        _, _, batched_terminated, _ = env.step(batched_actions)
+        assert all(terminated["__all__"] == True for terminated in batched_terminated)
     finally:
         env.close()
