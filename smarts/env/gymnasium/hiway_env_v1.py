@@ -21,7 +21,6 @@
 # THE SOFTWARE.
 import logging
 import os
-import warnings
 from enum import IntEnum
 from functools import partial
 from pathlib import Path
