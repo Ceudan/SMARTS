@@ -229,8 +229,8 @@ class HiWayEnvV1(gym.Env):
         Tuple[
             Dict[str, Any],
             Dict[str, float],
-            Dict[str, bool],
-            Dict[str, bool],
+            Dict[str, Union[bool,Dict]],
+            Dict[str, Union[bool,Dict]],
             Dict[str, Any],
         ],
     ]:
