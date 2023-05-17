@@ -10,7 +10,6 @@ from smarts.core.agent_interface import AgentInterface, AgentType
 from smarts.core.observations import Observation
 from smarts.core.utils.episodes import episodes
 from smarts.sstudio.scenario_construction import build_scenarios
-from smarts.zoo.agent_spec import AgentSpec
 from smarts.env.utils.observation_conversion import ObservationOptions
 
 N_AGENTS = 3
