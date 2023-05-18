@@ -28,7 +28,7 @@ from enum import Enum
 from typing import Any, Callable, Dict, Sequence, Tuple
 
 import cloudpickle
-import gym
+import gymnasium as gym
 
 __all__ = ["ParallelEnv"]
 
@@ -298,15 +298,15 @@ def _worker(
                 result = getattr(env, payload, None)
                 pipe.send((_Message.RESULT, result))
             elif message == _Message.RESET:
-                observation = env.reset()
-                pipe.send((_Message.RESULT, observation))
+                observation, info = env.reset()
+                pipe.send((_Message.RESULT, (observation, info)))
             elif message == _Message.STEP:
-                observation, reward, done, info = env.step(payload)
-                if done["__all__"] and auto_reset:
+                observation, reward, terminated, truncated, info = env.step(payload)
+                if (terminated["__all__"] or truncated["__all__"]) and auto_reset:
                     # Final observation can be obtained from `info` as follows:
                     # `final_obs = info[agent_id]["env_obs"]`
-                    observation = env.reset()
-                pipe.send((_Message.RESULT, (observation, reward, done, info)))
+                    observation, _ = env.reset()
+                pipe.send((_Message.RESULT, (observation, reward, terminated, truncated, info)))
             elif message == _Message.CLOSE:
                 break
             else:
