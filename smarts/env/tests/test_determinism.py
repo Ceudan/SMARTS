@@ -19,9 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-import gym
-import numpy as np
-import pytest
+import gymnasium as gym
 
 # Reference: https://stackoverflow.com/a/53978543/2783780
 try:
@@ -57,30 +55,30 @@ def agent_spec(max_steps_per_episode):
 def run(agent_spec, callback, scenarios, episode_count, capture_step):
     AGENT_ID = "Agent-007"
     env = gym.make(
-        "smarts.env:hiway-v0",
+        "smarts.env:hiway-v1",
         scenarios=[scenarios],
-        agent_specs={AGENT_ID: agent_spec},
+        agent_interfaces={AGENT_ID: agent_spec.interface},
         headless=True,
-        fixed_timestep_sec=0.01,
+        fixed_timestep_sec=0.1,
         seed=42,
     )
     i = 0
     for episode in episodes(n=episode_count):
         agent = agent_spec.build_agent()
-        observations = env.reset()
+        observations, _ = env.reset()
 
         episode.record_scenario(env.scenario_log)
 
-        dones = {"__all__": False}
-        while not dones["__all__"]:
+        terminated = {"__all__": False}
+        while not terminated["__all__"]:
             agent_obs = observations[AGENT_ID]
             agent_action = agent.act(agent_obs)
-            observations, rewards, dones, infos = env.step({AGENT_ID: agent_action})
+            observations, rewards, terminated, _, infos = env.step({AGENT_ID: agent_action})
 
-            episode.record_step(observations, rewards, dones, infos)
+            episode.record_step(observations, rewards, terminated, _, infos)
 
             if i % capture_step == 0:
-                callback(rewards, agent_obs, dones, int(i / capture_step))
+                callback(rewards, agent_obs, terminated, int(i / capture_step))
             i += 1
 
     env.close()

@@ -1,6 +1,6 @@
 import argparse
 
-import gym
+import gymnasium as gym
 
 from smarts.core.utils.episodes import episodes
 
@@ -25,11 +25,10 @@ if __name__ == "__main__":
         f"./{args.replay_data}/{args.scenarios[0].split('/')[-1]}/data_replay"
     )
     env = gym.make(
-        "smarts.env:hiway-v0",
+        "smarts.env:hiway-v1",
         scenarios=args.scenarios,
-        agent_specs={},
+        agent_interfaces={},
         headless=args.headless,
-        visdom=False,
         fixed_timestep_sec=0.1,
         envision_record_data_replay_path=data_replay_path,
     )

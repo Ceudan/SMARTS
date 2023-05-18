@@ -19,12 +19,10 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-import gym
+import gymnasium as gym
 import pytest
 
-from smarts.core.agent import Agent
 from smarts.core.agent_interface import AgentInterface, AgentType
-from smarts.core.utils.episodes import episodes
 from smarts.env.hiway_env import HiWayEnv
 
 AGENT_ID = "Agent-007"
@@ -43,11 +41,10 @@ def agent_interface():
 @pytest.fixture
 def env(agent_interface: AgentInterface):
     env = gym.make(
-        "smarts.env:hiway-v0",
+        "smarts.env:hiway-v1",
         scenarios=["scenarios/sumo/zoo_intersection"],
         agent_interfaces={AGENT_ID: agent_interface},
         headless=True,
-        fixed_timestep_sec=0.01,
     )
 
     yield env
@@ -71,11 +68,11 @@ def test_social_agents_in_env_neighborhood_vehicle_obs(
 ):
     first_seen_vehicles = {}
     for _ in range(MAX_EPISODES):
-        observations = env.reset()
+        observations, _ = env.reset()
 
-        dones = {"__all__": False}
-        while not dones["__all__"]:
-            observations, rewards, dones, infos = env.step({AGENT_ID: "keep_lane"})
+        terminated = {"__all__": False}
+        while not terminated["__all__"]:
+            observations, rewards, terminated, _, infos = env.step({AGENT_ID: "keep_lane"})
 
             new_nvs_ids = [
                 nvs.id
