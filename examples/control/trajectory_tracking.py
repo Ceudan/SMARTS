@@ -10,6 +10,7 @@ from smarts.core.agent_interface import AgentInterface, AgentType
 from smarts.core.utils.episodes import episodes
 from smarts.sstudio.scenario_construction import build_scenarios
 from smarts.env.utils.observation_conversion import ObservationOptions
+from smarts.env.utils.action_conversion import ActionOptions
 
 AGENT_ID = "Agent-007"
 
@@ -51,6 +52,7 @@ def main(scenarios, headless, num_episodes, max_episode_steps=None):
         agent_interfaces=agent_interfaces,
         headless=headless,
         observation_options=ObservationOptions.unformatted,
+        action_options=ActionOptions.unformatted,
     )
 
     for episode in episodes(n=num_episodes):
