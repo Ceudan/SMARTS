@@ -28,6 +28,7 @@ from smarts.core.agent import Agent
 from smarts.core.agent_interface import AgentInterface, AgentType
 from smarts.core.smarts import SMARTSNotSetupError
 from smarts.zoo.agent_spec import AgentSpec
+from smarts.env.utils.action_conversion import ActionOptions
 
 AGENT_ID = "AGENT-007"
 
@@ -37,9 +38,10 @@ def build_env(agent_spec):
         "smarts.env:hiway-v1",
         # TODO: Switch to a test scenario that has routes, and missions
         scenarios=["scenarios/sumo/loop"],
-        agent_specs={AGENT_ID: agent_spec.interface},
+        agent_interfaces={AGENT_ID: agent_spec.interface},
         headless=True,
         seed=2008,
+        action_options = ActionOptions.unformatted,
     )
 
 

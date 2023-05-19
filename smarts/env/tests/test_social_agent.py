@@ -24,6 +24,7 @@ import pytest
 
 from smarts.core.agent_interface import AgentInterface, AgentType
 from smarts.env.hiway_env import HiWayEnv
+from smarts.env.utils.action_conversion import ActionOptions
 
 AGENT_ID = "Agent-007"
 SOCIAL_AGENT_ID = "Alec Trevelyan"
@@ -45,6 +46,7 @@ def env(agent_interface: AgentInterface):
         scenarios=["scenarios/sumo/zoo_intersection"],
         agent_interfaces={AGENT_ID: agent_interface},
         headless=True,
+        action_options = ActionOptions.unformatted,
     )
 
     yield env

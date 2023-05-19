@@ -11,6 +11,7 @@ from smarts.core.agent_interface import AgentInterface, AgentType
 from smarts.core.utils.episodes import episodes
 from smarts.sstudio.scenario_construction import build_scenarios
 from smarts.zoo.agent_spec import AgentSpec
+from smarts.env.utils.action_conversion import ActionOptions
 
 N_AGENTS = 4
 AGENT_IDS = ["Agent %i" % i for i in range(N_AGENTS)]
@@ -40,6 +41,7 @@ def main(scenarios, headless, num_episodes, max_episode_steps=None):
             a_id: a_intrf.interface for a_id, a_intrf in agent_specs.items()
         },
         headless=headless,
+        action_options = ActionOptions.unformatted,
     )
 
     for episode in episodes(n=num_episodes):
